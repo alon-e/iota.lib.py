@@ -138,6 +138,30 @@ class Transaction(JsonSerializable):
       nonce = Hash(tryte_string[2592:2673]),
     )
 
+  @classmethod
+  def from_tryte_string_and_hash(cls, trytes,hash):
+    # type: (TrytesCompatible) -> Transaction
+    """
+    Creates a Transaction object from a sequence of trytes.
+    """
+    tryte_string = TransactionTrytes(trytes)
+
+    hash_ = hash
+
+    return cls(
+      hash_=TransactionHash(hash_),
+      signature_message_fragment=Fragment(tryte_string[0:2187]),
+      address=Address(tryte_string[2187:2268]),
+      value=int_from_trits(tryte_string[2268:2295].as_trits()),
+      tag=Tag(tryte_string[2295:2322]),
+      timestamp=int_from_trits(tryte_string[2322:2331].as_trits()),
+      current_index=int_from_trits(tryte_string[2331:2340].as_trits()),
+      last_index=int_from_trits(tryte_string[2340:2349].as_trits()),
+      bundle_hash=BundleHash(tryte_string[2349:2430]),
+      trunk_transaction_hash=TransactionHash(tryte_string[2430:2511]),
+      branch_transaction_hash=TransactionHash(tryte_string[2511:2592]),
+      nonce=Hash(tryte_string[2592:2673]),
+    )
   def __init__(
       self,
       hash_,
